@@ -3,4 +3,3 @@ ffmpeg
 pyrogram
 tgcrypto
 requests
-google
