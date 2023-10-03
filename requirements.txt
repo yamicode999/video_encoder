@@ -1,0 +1,6 @@
+python3-libtorrent
+ffmpeg
+pyrogram
+tgcrypto
+requests
+google
