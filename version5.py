@@ -19,6 +19,7 @@ app = Client(
 def starting(client, message):
     subtitle_path = message.document.file_name
     message.download(file_name=subtitle_path)
+    subtitle_path = os.path.join("downloads", subtitle_path)
 
     def download_torrent(torrent_link):
         # Download the .torrent file
