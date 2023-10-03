@@ -52,7 +52,7 @@ def starting(client, message):
             '-c:v', 'h264_nvenc',
             '-c:a', 'copy',
             '-preset', 'fast',
-            '-crf', '24',
+            '-crf', '22',
             '-f', 'mp4',
             output_path
         ]
