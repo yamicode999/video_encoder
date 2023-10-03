@@ -44,7 +44,7 @@ def starting(client, message):
 
     def encode_video(input_path, output_path, subtitle_path):
         # Set the FONTCONFIG_PATH to the directory containing the fonts
-        os.environ['FONTCONFIG_PATH'] = './fonts/'
+        os.environ['FONTCONFIG_PATH'] = './fonts/font/'
         command = [
             'ffmpeg',
             '-i', input_path,
