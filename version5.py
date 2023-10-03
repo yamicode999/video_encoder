@@ -15,45 +15,47 @@ app = Client(
     bot_token=bot_token
 )
 
-def download_torrent(torrent_link):
-    # Download the .torrent file
-    response = requests.get(torrent_link, allow_redirects=True)
-    torrent_file_path = "temp.torrent"
-    with open(torrent_file_path, 'wb') as file:
-        file.write(response.content)
-
-    # Start downloading video using the .torrent file
-    ses = lt.session()
-    info = lt.torrent_info(torrent_file_path)
-    h = ses.add_torrent({'ti': info, 'save_path': './'})
-    print('downloading', h.name())
-    while not h.is_seed():
-        s = h.status()
-        print('%.2f%% complete (down: %.1f kB/s up: %.1f kB/s peers: %d) %s' % (
-            s.progress * 100, s.download_rate / 1000, s.upload_rate / 1000,
-            s.num_peers, s.state))
-        time.sleep(1)
-    print("Download complete!")
-    return h.name()
-
-def encode_video(input_path, output_path, subtitle_path):
-    # Set the FONTCONFIG_PATH to the directory containing the fonts
-    os.environ['FONTCONFIG_PATH'] = './fonts/'
-    command = [
-        'ffmpeg',
-        '-i', input_path,
-        '-vf', f'subtitles={subtitle_path},scale=1920:-1',
-        '-c:v', 'h264_nvenc',
-        '-c:a', 'copy',
-        '-preset', 'medium',
-        '-crf', '22',
-        '-f', 'mp4',
-        output_path
-    ]
-    subprocess.run(command)
 
 @app.on_message(filters.command("start"))
 async def starting(client, message):
+    
+    def download_torrent(torrent_link):
+        # Download the .torrent file
+        response = requests.get(torrent_link, allow_redirects=True)
+        torrent_file_path = "temp.torrent"
+        with open(torrent_file_path, 'wb') as file:
+            file.write(response.content)
+
+        # Start downloading video using the .torrent file
+        ses = lt.session()
+        info = lt.torrent_info(torrent_file_path)
+        h = ses.add_torrent({'ti': info, 'save_path': './'})
+        print('downloading', h.name())
+        while not h.is_seed():
+            s = h.status()
+            print('%.2f%% complete (down: %.1f kB/s up: %.1f kB/s peers: %d) %s' % (
+                s.progress * 100, s.download_rate / 1000, s.upload_rate / 1000,
+                s.num_peers, s.state))
+            time.sleep(1)
+        print("Download complete!")
+        return h.name()
+
+    def encode_video(input_path, output_path, subtitle_path):
+        # Set the FONTCONFIG_PATH to the directory containing the fonts
+        os.environ['FONTCONFIG_PATH'] = './fonts/'
+        command = [
+            'ffmpeg',
+            '-i', input_path,
+            '-vf', f'subtitles={subtitle_path},scale=1920:-1',
+            '-c:v', 'h264_nvenc',
+            '-c:a', 'copy',
+            '-preset', 'medium',
+            '-crf', '22',
+            '-f', 'mp4',
+            output_path
+        ]
+        subprocess.run(command)
+        
     # Prompt user to provide torrent link
     torrent_link = input("Please paste your torrent link here: ")
 
