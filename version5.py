@@ -17,7 +17,7 @@ app = Client(
 
 
 @app.on_message(filters.command("start"))
-async def starting(client, message):
+def starting(client, message):
     
     def download_torrent(torrent_link):
         # Download the .torrent file
@@ -49,8 +49,8 @@ async def starting(client, message):
             '-vf', f'subtitles={subtitle_path},scale=1920:-1',
             '-c:v', 'h264_nvenc',
             '-c:a', 'copy',
-            '-preset', 'medium',
-            '-crf', '22',
+            '-preset', 'fast',
+            '-crf', '24',
             '-f', 'mp4',
             output_path
         ]
@@ -87,7 +87,7 @@ async def starting(client, message):
 
     # Offer the encoded video for download
     print("\nDownload your encoded video:")
-    await client.send_video(message.chat.id, output_video_name, supports_streaming=True)
+    client.send_video(message.chat.id, output_video_name, supports_streaming=True)
 
 if __name__ == "__main__":
     print("Yami Code Academy.")
