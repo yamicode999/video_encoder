@@ -2,7 +2,6 @@ import libtorrent as lt
 import time
 import subprocess
 import requests
-from google.colab import files
 import os
 import zipfile
 from pyrogram import filters, Client
@@ -16,9 +15,11 @@ app = Client(
 )
 
 
-@app.on_message(filters.command("start"))
+@app.on_message(filters.document)
 def starting(client, message):
-    
+    subtitle_path = message.document.file_name
+    message.download(file_name=subtitle_path)
+
     def download_torrent(torrent_link):
         # Download the .torrent file
         response = requests.get(torrent_link, allow_redirects=True)
@@ -55,17 +56,12 @@ def starting(client, message):
             output_path
         ]
         subprocess.run(command)
-        
+
     # Prompt user to provide torrent link
     torrent_link = input("Please paste your torrent link here: ")
 
     # Download the video using the provided torrent link
     downloaded_video = download_torrent(torrent_link)
-
-    # Prompt user to upload the .srt subtitle file
-    print("\nPlease upload your .srt subtitle file:")
-    subtitle_file = files.upload()
-    subtitle_path = list(subtitle_file.keys())[0]
 
     # Download font.zip from Dropbox (or any other file-sharing platform)
     print("\nDownloading fonts from Dropbox...")
@@ -88,6 +84,7 @@ def starting(client, message):
     # Offer the encoded video for download
     print("\nDownload your encoded video:")
     client.send_video(message.chat.id, output_video_name, supports_streaming=True)
+
 
 if __name__ == "__main__":
     print("Yami Code Academy.")
