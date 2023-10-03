@@ -48,7 +48,7 @@ def starting(client, message):
         command = [
             'ffmpeg',
             '-i', input_path,
-            '-vf', f'subtitles={subtitle_path},scale=1920:-1',
+            '-vf', f'subtitles={subtitle_path}:fontsdir=./fonts/font/,scale=1920:-1',
             '-c:v', 'h264_nvenc',
             '-c:a', 'copy',
             '-preset', 'fast',
